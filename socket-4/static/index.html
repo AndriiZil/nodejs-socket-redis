@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Socket.io</title>
+</head>
+<body>
+    <h1>Socket.io</h1>
+    <label for="name">Name:</label>
+    <input type="text" id="name">
+    <button id="send">Say Hello</button>
+    <ul id="list"></ul>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io({ transports: ['websocket'], upgrade: false });
+        const addLi = (message) => {
+          const li = document.createElement('li');
+          li.appendChild(document.createTextNode(message));
+          document.getElementById('list').appendChild(li);
+        };
+
+        document.getElementById('send').addEventListener('click', (e) => {
+          socket.emit('name', document.getElementById('name').value);
+        });
+
+        socket.on('name', (name) => addLi(`${name} says Hello!`));
+        socket.on('user.events', addLi);
+    </script>
+</body>
+</html>
